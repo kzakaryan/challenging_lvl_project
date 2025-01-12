@@ -6,7 +6,6 @@ import model.Address;
 import model.Contact;
 import model.Gender;
 import model.Person;
-
 import java.io.*;
 import java.time.LocalDate;
 import java.util.*;
@@ -19,14 +18,13 @@ public class PersonService {
     private static int currentId = 1;
 
     static {
-        objectMapper.enable(SerializationFeature.INDENT_OUTPUT); // Pretty print JSON
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
-    // Load data from the JSON file
     public static void loadDatabase() {
         File file = new File(DATABASE_FILE);
         if (!file.exists()) {
-            return; // No data to load
+            return;
         }
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
@@ -40,28 +38,26 @@ public class PersonService {
         }
     }
 
-    // Save all data back to the JSON file
     public static void saveDatabase() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(DATABASE_FILE))) {
             for (Person person : database.values()) {
                 writer.write(objectMapper.writeValueAsString(person));
-                writer.newLine(); // Write each person on a new line
+                writer.newLine();
             }
         } catch (IOException e) {
             System.out.println("Error saving database: " + e.getMessage());
         }
     }
 
-    // Add a new person to the database using JSON data (previous method)
     public static void addPerson(Person person) {
         if (person == null) {
             throw new InvalidPersonDataException("Person data cannot be null");
         }
         person.setId(currentId++);
         database.put(person.getId(), person);
+        saveDatabase();
     }
 
-    // Add a new person to the database using setters (step-by-step)
     public static void addPersonUsingSetters(Scanner scanner) {
         Person person = new Person();
 
@@ -74,7 +70,6 @@ public class PersonService {
         System.out.print("Enter date of birth (YYYY-MM-DD): ");
         person.setDateOfBirth(LocalDate.parse(scanner.nextLine()));
 
-        // Set address
         Address address = new Address();
         System.out.print("Enter street: ");
         address.setStreet(scanner.nextLine());
@@ -88,7 +83,6 @@ public class PersonService {
         address.setCountry(scanner.nextLine());
         person.setAddress(address);
 
-        // Set contacts
         List<Contact> contacts = new ArrayList<>();
         boolean addMoreContacts = true;
         while (addMoreContacts) {
@@ -104,21 +98,20 @@ public class PersonService {
         }
         person.setContacts(contacts);
 
-        // Set gender
         System.out.print("Enter gender (MALE/FEMALE): ");
         person.setGender(Gender.valueOf(scanner.nextLine().toUpperCase()));
 
-        // Set active status
         System.out.print("Is the person active? (true/false): ");
         person.setActive(Boolean.parseBoolean(scanner.nextLine()));
 
         person.setId(currentId++);
         database.put(person.getId(), person);
 
+        saveDatabase();
+
         System.out.println("Person added successfully: " + person);
     }
 
-    // Get a person by ID
     public static Person getPersonById(int id) {
         if (!database.containsKey(id)) {
             throw new PersonNotFoundException("Person not found with ID: " + id);
@@ -126,16 +119,15 @@ public class PersonService {
         return database.get(id);
     }
 
-    // Delete a person by ID
     public static boolean deletePersonById(int id) {
         if (!database.containsKey(id)) {
             throw new PersonNotFoundException("Person not found with ID: " + id);
         }
         database.remove(id);
+        saveDatabase();
         return true;
     }
 
-    // Get all people in the database
     public static Collection<Person> getAllPeople() {
         return database.values();
     }
