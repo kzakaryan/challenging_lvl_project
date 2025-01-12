@@ -1,3 +1,5 @@
+package model;
+
 /**
  * Enum for keeping constant values of gender
  */
