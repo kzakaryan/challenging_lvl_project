@@ -1,7 +1,5 @@
 package model;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
-
 import java.io.Serializable;
 
 /**

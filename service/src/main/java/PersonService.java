@@ -1,21 +1,11 @@
+import model.*;
+import java.io.*;
+import java.text.*;
+import java.util.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import exception.InvalidPersonDataException;
 import exception.PersonNotFoundException;
-import model.Address;
-import model.Contact;
-import model.Gender;
-import model.Person;
-
-import javax.swing.text.DateFormatter;
-import java.io.*;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
 
 public class PersonService {
 
@@ -58,15 +48,6 @@ public class PersonService {
             throw new RuntimeException(e);
         }
 
-    }
-
-    public static void addPerson(Person person) {
-        if (person == null) {
-            throw new InvalidPersonDataException("Person data cannot be null");
-        }
-        person.setId(currentId++);
-        database.put(person.getId(), person);
-        saveDatabase();
     }
 
     public static void addPersonUsingSetters(Scanner scanner) {
@@ -125,13 +106,8 @@ public class PersonService {
 
         person.setId(currentId++);
         database.put(person.getId(), person);
-
-        System.out.println("Address: " + person.getAddress());
-        System.out.println("Contact: " + person.getContacts());
-
         saveDatabase();
-
-        System.out.println("Person added successfully: " + person);
+        System.out.println("Person added successfully: \n" + person);
     }
 
     public static Person getPersonById(int id) {

@@ -36,8 +36,8 @@ public class DatabaseControllerImpl {
                 case "GET":
                     handleGet(parts);
                     break;
-                case "POST-SETTERS":
-                    handlePostUsingSetters(scanner);
+                case "POST":
+                    handlePost(scanner);
                     break;
                 case "DELETE":
                     handleDelete(parts);
@@ -69,7 +69,7 @@ public class DatabaseControllerImpl {
         }
     }
 
-    private static void handlePostUsingSetters(Scanner scanner) {
+    private static void handlePost(Scanner scanner) {
         PersonService.addPersonUsingSetters(scanner);
     }
 
