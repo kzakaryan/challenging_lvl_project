@@ -1,8 +1,6 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import model.Person;
-
-import java.text.ParseException;
 import java.util.*;
 
 public class DatabaseControllerImpl {
@@ -14,7 +12,8 @@ public class DatabaseControllerImpl {
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     }
 
-    public static void launch(Scanner scanner) throws ParseException {
+
+    public static void launch(Scanner scanner) {
         System.out.println("Welcome to the Terminal REST App (Person Management with File I/O)!");
         System.out.println("Available commands:");
         System.out.println("1. GET [id] - Retrieve a person by ID");
@@ -48,7 +47,7 @@ public class DatabaseControllerImpl {
                     break;
                 case "EXIT":
                     System.out.println("Goodbye!");
-                    PersonService.saveDatabase(); // Save data before exiting
+                    PersonService.saveDatabase();
                     return;
                 default:
                     System.out.println("Invalid command. Please try again.");
@@ -70,7 +69,7 @@ public class DatabaseControllerImpl {
         }
     }
 
-    private static void handlePostUsingSetters(Scanner scanner) throws ParseException {
+    private static void handlePostUsingSetters(Scanner scanner) {
         PersonService.addPersonUsingSetters(scanner);
     }
 
