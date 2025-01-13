@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import exception.InvalidPersonDataException;
@@ -6,8 +7,14 @@ import model.Address;
 import model.Contact;
 import model.Gender;
 import model.Person;
+
+import javax.swing.text.DateFormatter;
 import java.io.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class PersonService {
@@ -19,6 +26,7 @@ public class PersonService {
 
     static {
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     }
 
     public static void loadDatabase() {
@@ -44,8 +52,10 @@ public class PersonService {
                 writer.write(objectMapper.writeValueAsString(person));
                 writer.newLine();
             }
-        } catch (IOException e) {
+        } catch (JsonProcessingException e) {
             System.out.println("Error saving database: " + e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -68,7 +78,15 @@ public class PersonService {
         person.setLastName(scanner.nextLine());
 
         System.out.print("Enter date of birth (YYYY-MM-DD): ");
-        person.setDateOfBirth(LocalDate.parse(scanner.nextLine()));
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+
+        try {
+            person.setDateOfBirth(formatter.parse(scanner.nextLine()));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
 
         Address address = new Address();
         System.out.print("Enter street: ");
@@ -106,6 +124,9 @@ public class PersonService {
 
         person.setId(currentId++);
         database.put(person.getId(), person);
+
+        System.out.println("Address: " + person.getAddress());
+        System.out.println("Contact: " + person.getContacts());
 
         saveDatabase();
 

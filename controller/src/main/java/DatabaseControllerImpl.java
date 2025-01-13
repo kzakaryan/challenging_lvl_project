@@ -1,20 +1,27 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import model.Person;
+
+import java.text.ParseException;
 import java.util.*;
 
 public class DatabaseControllerImpl {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    public static void launch(Scanner scanner) {
+    static {
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+    }
+
+    public static void launch(Scanner scanner) throws ParseException {
         System.out.println("Welcome to the Terminal REST App (Person Management with File I/O)!");
         System.out.println("Available commands:");
         System.out.println("1. GET [id] - Retrieve a person by ID");
-        System.out.println("2. POST [JSON] - Create a new person (in JSON format)");
-        System.out.println("3. POST-SETTERS - Create a new person using setters");
-        System.out.println("4. DELETE [id] - Delete a person by ID");
-        System.out.println("5. PRINT - Print all people in JSON format");
-        System.out.println("6. EXIT - Exit the application");
+        System.out.println("2. POST-SETTERS - Create a new person using setters");
+        System.out.println("3. DELETE [id] - Delete a person by ID");
+        System.out.println("4. PRINT - Print all people in JSON format");
+        System.out.println("5. EXIT - Exit the application");
         System.out.println();
 
         PersonService.loadDatabase();
@@ -29,9 +36,6 @@ public class DatabaseControllerImpl {
             switch (command) {
                 case "GET":
                     handleGet(parts);
-                    break;
-                case "POST":
-                    handlePost(parts);
                     break;
                 case "POST-SETTERS":
                     handlePostUsingSetters(scanner);
@@ -66,21 +70,7 @@ public class DatabaseControllerImpl {
         }
     }
 
-    private static void handlePost(String[] parts) {
-        if (parts.length < 2) {
-            System.out.println("Error: Missing JSON data for POST command.");
-            return;
-        }
-        try {
-            Person person = objectMapper.readValue(parts[1], Person.class);
-            PersonService.addPerson(person);
-            System.out.println("Person added successfully: " + person);
-        } catch (Exception e) {
-            System.out.println("Error: Invalid JSON format.");
-        }
-    }
-
-    private static void handlePostUsingSetters(Scanner scanner) {
+    private static void handlePostUsingSetters(Scanner scanner) throws ParseException {
         PersonService.addPersonUsingSetters(scanner);
     }
 

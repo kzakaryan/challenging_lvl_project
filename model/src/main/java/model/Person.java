@@ -1,17 +1,18 @@
 package model;
 
+import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
-import java.time.LocalDate;
 
 /**
  * model.Person class to keep record for people in the database
  */
-public class Person {
+public class Person implements Serializable {
 
     private int id;
     private String firstName;
     private String lastName;
-    private LocalDate dateOfBirth;
+    private Date dateOfBirth;
     private Address address;
     private List<Contact> contacts;
     private Gender gender;
@@ -33,11 +34,11 @@ public class Person {
         this.lastName = lastName;
     }
 
-    public LocalDate getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(LocalDate dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
