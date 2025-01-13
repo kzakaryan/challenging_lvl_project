@@ -55,5 +55,13 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+<!--    <dependencies>-->
+<!--        <dependency>-->
+<!--            <groupId>challenging_lvl_project</groupId>-->
+<!--            <artifactId>controller</artifactId>-->
+<!--            <version>1.0-SNAPSHOT</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
+<!--    </dependencies>-->
 
 </project>
